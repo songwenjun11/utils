@@ -30,6 +30,11 @@ android {
 }
 
 dependencies {
+    implementation fileTree(dir: "libs", include: ["*.aar"])
+    implementation rootProject.ext.dependencies.retrofit
+    api rootProject.ext.dependencies.glide
+    implementation rootProject.ext.dependencies.rxjava
+    implementation rootProject.ext.dependencies.rxAndroid
 
     implementation rootProject.ext.dependencies.kotlin_stdlib
     implementation rootProject.ext.dependencies.core_ktx

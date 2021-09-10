@@ -53,6 +53,7 @@ android {
 
 dependencies {
     api project(path: ':net')
+    api rootProject.ext.dependencies.circleImageView
 
     implementation rootProject.ext.dependencies.kotlin_stdlib
     implementation rootProject.ext.dependencies.core_ktx

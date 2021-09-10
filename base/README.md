@@ -1,0 +1,2 @@
+- 这里是Base层的内容，目前添加了BaseActivity、BaseFragment、BaseRecyclerViewAdapter
+- Here is the content of the Base layer, currently added BaseActivity, BaseFragment, BaseRecyclerViewAdapter  
