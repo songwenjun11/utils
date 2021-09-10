@@ -1,2 +1,6 @@
 rootProject.name = "PublicUtils"
 include ':app'
+include ':common'
+include ':net'
+include ':component'
+include ':base'

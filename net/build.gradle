@@ -1,22 +1,39 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+if (isModule.toBoolean()) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
 }
+apply plugin:'kotlin-android'
 
-def keystorePropertiesFile = rootProject.file("keystore.properties")
-def keystoreProperties = new Properties()
-keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     compileSdkVersion rootProject.ext.android.sdk_version
     buildToolsVersion rootProject.ext.android.buildToolsVersion
     defaultConfig {
-        applicationId rootProject.ext.android.applicationId
+        if (isModule.toBoolean()){
+            applicationId "com.realize.net"
+        }
         minSdkVersion rootProject.ext.android.min_sdk_version
         targetSdkVersion rootProject.ext.android.targetSdkVersion
         versionCode rootProject.ext.android.versionCode
         versionName rootProject.ext.android.versionName
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    //组件化开发模式,读取组件开发模式下的的清单文件,如果是集成开发模式,读取默认的清单文件,当然,默认清单文件需要重新配置
+    sourceSets {
+        main {
+            if (isModule.toBoolean()) {
+                manifest.srcFile 'src/main/module/AndroidManifest.xml'
+            } else {
+                manifest.srcFile 'src/main/AndroidManifest.xml'
+                //集成开发模式下排除debug文件夹中的所有Java文件
+                java {
+                    exclude 'debug/**'
+                }
+            }
+        }
     }
 
     buildTypes {
@@ -32,20 +49,10 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-    //配置签名文件
-    signingConfigs {
-        release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile file(keystoreProperties['storeFile'])
-            storePassword keystoreProperties['storePassword']
-        }
-    }
 }
 
 dependencies {
-    implementation project(path: ':component')
+    api project(path: ':base')
 
     implementation rootProject.ext.dependencies.kotlin_stdlib
     implementation rootProject.ext.dependencies.core_ktx
