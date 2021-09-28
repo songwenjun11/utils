@@ -1,7 +1,11 @@
-plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
-}
+//plugins {
+//    id 'com.android.application'
+//    id 'kotlin-android'
+//    id 'kotlin-apt'
+//}
+apply plugin:'com.android.application'
+apply plugin:'kotlin-android'
+apply plugin:'kotlin-kapt'
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -9,6 +13,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     compileSdkVersion rootProject.ext.android.sdk_version
     buildToolsVersion rootProject.ext.android.buildToolsVersion
+    kapt.includeCompileClasspath = false
     defaultConfig {
         applicationId rootProject.ext.android.applicationId
         minSdkVersion rootProject.ext.android.min_sdk_version
@@ -21,7 +26,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled rootProject.ext.minifyEnabled
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
@@ -55,4 +60,8 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+
+    kapt project(path: ':router-process')
+    implementation project(path: ':router-note')
 }

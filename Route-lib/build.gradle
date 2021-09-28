@@ -1,16 +1,14 @@
-if (isModule.toBoolean()) {
-    apply plugin: 'com.android.application'
-} else {
-    apply plugin: 'com.android.library'
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
 }
-apply plugin:'kotlin-android'
 
 android {
     compileSdkVersion rootProject.ext.android.sdk_version
     buildToolsVersion rootProject.ext.android.buildToolsVersion
     defaultConfig {
-        if (isModule.toBoolean()){
-            applicationId "com.realize.base"
+        if (isModule.toBoolean()) {
+            applicationId "com.realize.net"
         }
         minSdkVersion rootProject.ext.android.min_sdk_version
         targetSdkVersion rootProject.ext.android.targetSdkVersion
@@ -21,49 +19,31 @@ android {
         consumerProguardFiles "consumer-rules.pro"
     }
 
-    //组件化开发模式,读取组件开发模式下的的清单文件,如果是集成开发模式,读取默认的清单文件,当然,默认清单文件需要重新配置
-    sourceSets {
-        main {
-            if (isModule.toBoolean()) {
-                manifest.srcFile 'src/main/module/AndroidManifest.xml'
-            } else {
-                manifest.srcFile 'src/main/AndroidManifest.xml'
-                //集成开发模式下排除debug文件夹中的所有Java文件
-                java {
-                    exclude 'debug/**'
-                }
-            }
-        }
-    }
-
     buildTypes {
         release {
-            minifyEnabled rootProject.ext.minifyEnabled
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
     }
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
-    buildFeatures{
-        dataBinding = true
-    }
 }
 
 dependencies {
-    api project(path: ':common')
 
     implementation rootProject.ext.dependencies.kotlin_stdlib
     implementation rootProject.ext.dependencies.core_ktx
     implementation rootProject.ext.dependencies.androidx_appcompat
     implementation rootProject.ext.dependencies.android_material
     implementation rootProject.ext.dependencies.constraintlayout
-    testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
+    implementation 'com.squareup:javapoet:1.9.0'
+
 }
